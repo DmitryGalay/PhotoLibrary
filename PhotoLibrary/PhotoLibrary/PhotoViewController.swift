@@ -21,21 +21,21 @@ struct OfferModel {
 
 
 struct Strain: Codable, Hashable {
-        let name: String!
+//        let name: String!
     let photo_url: String
     let user_name: String
     let user_url: String
     let colors: [String]
-        init(dictionary: [String: Strain]) throws {
-            guard
-                let key = dictionary.keys.randomElement(),
-                let strain = dictionary[key] else { throw ParseError.noKeyFound }
-            name = key
-            photo_url = strain.photo_url
-            user_name = strain.user_name
-            user_url = strain.user_url
-            colors = strain.colors
-        }
+//        init(dictionary: [String: Strain]) throws {
+//            guard
+//                let key = dictionary.keys.randomElement(),
+//                let strain = dictionary[key] else { throw ParseError.noKeyFound }
+//            name = key
+//            photo_url = strain.photo_url
+//            user_name = strain.user_name
+//            user_url = strain.user_url
+//            colors = strain.colors
+//        }
 }
 
 
@@ -89,28 +89,19 @@ class PhotoViewController: UIViewController,UICollectionViewDataSource{
                 if data != nil {
                     decoderModel = try? decoder.decode(MainModel.self, from: data!)
                 }
-//                for model in decoderModel!.keys {
-//                    print(model)
-                    
-//                }
+
                 
                 mainModel = decoderModel
-//                print(mainModel)
+
                 
                 massKeys = [String](decoderModel!.keys)
-                
-                
+                print(massKeys)
                 massValue = [Strain](decoderModel!.values)
                 
-//                massValue.first
                 
                 
                 
-//                print(massValue.first)
-                
-//                print(decoderModel?.keys)
-//                print(massValue)
-                
+
             }else {
                 print(error as Any)
             }
@@ -118,21 +109,31 @@ class PhotoViewController: UIViewController,UICollectionViewDataSource{
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return massKeys.count
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
 //        cell.mainImageView.contentMode = .scaleAspectFill
         cell.backgroundColor = .yellow
+        let sortedDict = mainModel.sorted{( $0.value.user_name) < ($1.value.user_name) }
+        print(sortedDict)
+//
+        let new = sortedDict[indexPath.item].key
+        print(new)
+//        let news = sortedDict
         
-        cell.mailPhotoLabel.text = "\(String(describing: mainModel[massKeys[indexPath.row] ]!.photo_url ))"
-//        cell.label.text = "\(String(describing: mainModel.values.first?.photo_url ))"
-        print(cell.mailPhotoLabel.text)
         
-        cell.mainImageView.downloaded(from: "https://dev.bgsoft.biz/task/\(massKeys[indexPath.row]).jpg"
+        
+        cell.userName.text = "user_name:\(String(describing: mainModel[new]!.user_name ))"
+        cell.userUrl.text = "user_url:\(String(describing: mainModel[new]!.user_url ))"
+        cell.photoUrl.text = "photo_url:\(String(describing: mainModel[new]!.photo_url ))"
+//
+//        print("--------------------\(sortedDict)")
+        cell.mainImageView.downloaded(from: "https://dev.bgsoft.biz/task/\(new).jpg"
                                     , completion: {})
-        cell.layer.cornerRadius = 7
+        
         return cell
     }
 }
