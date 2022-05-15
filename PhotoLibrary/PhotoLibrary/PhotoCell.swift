@@ -12,9 +12,13 @@ class PhotoCell: UICollectionViewCell {
     @IBOutlet weak var mainImageView: UIImageView!
     
     @IBOutlet weak var userName: UILabel!
-    @IBOutlet weak var photoUrl: UILabel!
-    @IBOutlet weak var userUrl: UILabel!
+    
+    @IBOutlet weak var photoUrl: UIButton!
+    
+    @IBOutlet weak var userUrl: UIButton!
+    
     //    override func prepareForReuse() {
+    
 //        super.prepareForReuse()
 //        mainImageView.image = nil
 //    }

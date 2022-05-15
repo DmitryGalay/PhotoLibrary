@@ -39,19 +39,28 @@ struct Strain: Codable, Hashable {
 }
 
 
-class PhotoViewController: UIViewController,UICollectionViewDataSource{
-    
-  
-    
+class PhotoViewController: UIViewController,UICollectionViewDataSource {
+   
     @IBOutlet weak var customCollectionView: UICollectionView!
     
     var massKeys = [String]()
     var massValue = [Strain]()
     var mainModel: MainModel!
     var strain: Strain?
+    var tapPhotoUrl : String?
+    var tapUserUrl: String?
+    
+//    init(string: String) {
+//            self.string = string
+//            super.init(nibName: nil, bundle: nil)
+//        }
+//
+//    required init?(coder aDecoder: NSCoder) {
+//       super.init(coder: aDecoder)
+//    }
     
     override func viewDidLoad() {
-        
+      
         getURL()
         
         customCollectionView.dataSource = self
@@ -95,7 +104,7 @@ class PhotoViewController: UIViewController,UICollectionViewDataSource{
 
                 
                 massKeys = [String](decoderModel!.keys)
-                print(massKeys)
+                
                 massValue = [Strain](decoderModel!.values)
                 
                 
@@ -107,6 +116,7 @@ class PhotoViewController: UIViewController,UICollectionViewDataSource{
             }
         }.resume()
     }
+    
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return massKeys.count
@@ -116,28 +126,60 @@ class PhotoViewController: UIViewController,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
 //        cell.mainImageView.contentMode = .scaleAspectFill
-        cell.backgroundColor = .yellow
+        cell.backgroundColor = .black
         let sortedDict = mainModel.sorted{( $0.value.user_name) < ($1.value.user_name) }
-        print(sortedDict)
+//        print(sortedDict)
 //
         let new = sortedDict[indexPath.item].key
-        print(new)
+//        print(new)
 //        let news = sortedDict
         
         
         
         cell.userName.text = "user_name:\(String(describing: mainModel[new]!.user_name ))"
-        cell.userUrl.text = "user_url:\(String(describing: mainModel[new]!.user_url ))"
-        cell.photoUrl.text = "photo_url:\(String(describing: mainModel[new]!.photo_url ))"
+        
+        cell.photoUrl.setTitle("Photo_url", for: .normal)
+        cell.userUrl.setTitle("User_url", for: .normal)
+        cell.photoUrl.addTarget(self, action:  #selector(connectedPhoto(sender:)), for: UIControl.Event.touchUpInside)
+        cell.userUrl.addTarget(self, action:  #selector(connectedUser(sender:)), for: UIControl.Event.touchUpInside)
+//        userNameTextField.addTarget(self, action: #selector(LoginViewController.userCheck(textField:)), for: .editingChanged)
+    
+        tapPhotoUrl = "\(String(describing: mainModel[new]!.photo_url))"
+        tapUserUrl = "\(String(describing: mainModel[new]!.user_url ))"
+//        photoUrll = string
+//        print(string)
+//        print(photoUrll)
+//        cell.userUrl.text = "\(String(describing: mainModel[new]!.user_url ))"
+//        cell.photoUrl.text = "photo_url:\(String(describing: mainModel[new]!.photo_url ))"
 //
-//        print("--------------------\(sortedDict)")
+//
         cell.mainImageView.downloaded(from: "https://dev.bgsoft.biz/task/\(new).jpg"
                                     , completion: {})
         
         return cell
     }
+    
+    @objc func connectedPhoto(sender: UIButton!) {
+
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let editScreen = storyboard.instantiateViewController(withIdentifier:
+        "WebViewController") as! WebViewController
+        editScreen.text = tapPhotoUrl!
+        self.present(editScreen, animated: true, completion: nil)
 }
     
+    
+    @objc func connectedUser(sender: UIButton!) {
+
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let editScreen = storyboard.instantiateViewController(withIdentifier:
+        "WebViewController") as! WebViewController
+        editScreen.text = tapUserUrl!
+        self.present(editScreen, animated: true, completion: nil)
+}
+}
+
+
     
 //extension PhotoViewController: UICollectionViewDelegateFlowLayout {
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -175,5 +217,16 @@ extension UIImageView {
     }
 }
 
-
+//extension PhotoViewController: PhotoUrl {
+//    var photoUrll: String {
+//        get {
+//            return string
+//        }
+//        set {
+//            string = newValue
+//        }
+//    }
+//
+//
+//}
 
