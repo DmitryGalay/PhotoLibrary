@@ -68,8 +68,7 @@
 		320D574F282E8A8400E88C34 /* PhotoLibrary */ = {
 			isa = PBXGroup;
 			children = (
-				320D5750282E8A8400E88C34 /* AppDelegate.swift */,
-				320D5752282E8A8400E88C34 /* SceneDelegate.swift */,
+				326210C62832A58C001525C7 /* Supporting Files */,
 				326210A128317C13001525C7 /* WebViewController.swift */,
 				326210C428327229001525C7 /* NetworkService.swift */,
 				320D5754282E8A8400E88C34 /* PhotoViewController.swift */,
@@ -77,9 +76,6 @@
 				326210C228326DFB001525C7 /* PhotoCell */,
 				326210B8283266D0001525C7 /* MainModel.swift */,
 				326210C3283271B6001525C7 /* Extensions */,
-				320D5759282E8A8800E88C34 /* Assets.xcassets */,
-				320D575B282E8A8800E88C34 /* LaunchScreen.storyboard */,
-				320D575E282E8A8800E88C34 /* Info.plist */,
 			);
 			path = PhotoLibrary;
 			sourceTree = "<group>";
@@ -99,6 +95,18 @@
 				326210C028326B2F001525C7 /* Extension+UIImageView.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		326210C62832A58C001525C7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				320D5752282E8A8400E88C34 /* SceneDelegate.swift */,
+				320D5750282E8A8400E88C34 /* AppDelegate.swift */,
+				320D5759282E8A8800E88C34 /* Assets.xcassets */,
+				320D575B282E8A8800E88C34 /* LaunchScreen.storyboard */,
+				320D575E282E8A8800E88C34 /* Info.plist */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,7 +338,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = PhotoLibrary/Info.plist;
+				INFOPLIST_FILE = "PhotoLibrary/Supporting Files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -357,7 +365,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = PhotoLibrary/Info.plist;
+				INFOPLIST_FILE = "PhotoLibrary/Supporting Files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

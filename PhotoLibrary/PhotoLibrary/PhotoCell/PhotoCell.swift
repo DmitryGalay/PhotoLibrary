@@ -21,5 +21,9 @@ class PhotoCell: UICollectionViewCell {
     
     @IBOutlet weak var userUrl: UIButton!
     
-      
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
 }
