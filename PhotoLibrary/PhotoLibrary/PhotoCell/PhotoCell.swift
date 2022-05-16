@@ -2,12 +2,16 @@
 //  PhotoCell.swift
 //  PhotoLibrary
 //
-//  Created by Dima on 13.05.22.
+//  Created by Dima on 16.05.22.
 //
 
 import UIKit
 
 class PhotoCell: UICollectionViewCell {
+    
+    override var reuseIdentifier: String? {
+        return "PhotoCell"
+    }
     
     @IBOutlet weak var mainImageView: UIImageView!
     
@@ -17,9 +21,5 @@ class PhotoCell: UICollectionViewCell {
     
     @IBOutlet weak var userUrl: UIButton!
     
-    //    override func prepareForReuse() {
-    
-//        super.prepareForReuse()
-//        mainImageView.image = nil
-//    }
+      
 }
