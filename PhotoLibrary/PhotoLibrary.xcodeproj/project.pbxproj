@@ -19,6 +19,7 @@
 		326210BF28326868001525C7 /* PhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 326210BD28326868001525C7 /* PhotoCell.xib */; };
 		326210C128326B2F001525C7 /* Extension+UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326210C028326B2F001525C7 /* Extension+UIImageView.swift */; };
 		326210C528327229001525C7 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326210C428327229001525C7 /* NetworkService.swift */; };
+		326210C92832B273001525C7 /* Extension+UiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326210C82832B273001525C7 /* Extension+UiView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		326210BD28326868001525C7 /* PhotoCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoCell.xib; sourceTree = "<group>"; };
 		326210C028326B2F001525C7 /* Extension+UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIImageView.swift"; sourceTree = "<group>"; };
 		326210C428327229001525C7 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		326210C82832B273001525C7 /* Extension+UiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UiView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +76,7 @@
 				320D5754282E8A8400E88C34 /* PhotoViewController.swift */,
 				320D5756282E8A8400E88C34 /* Main.storyboard */,
 				326210C228326DFB001525C7 /* PhotoCell */,
-				326210B8283266D0001525C7 /* MainModel.swift */,
+				326210CA2832C31F001525C7 /* Model */,
 				326210C3283271B6001525C7 /* Extensions */,
 			);
 			path = PhotoLibrary;
@@ -93,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				326210C028326B2F001525C7 /* Extension+UIImageView.swift */,
+				326210C82832B273001525C7 /* Extension+UiView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -107,6 +110,14 @@
 				320D575E282E8A8800E88C34 /* Info.plist */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		326210CA2832C31F001525C7 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				326210B8283266D0001525C7 /* MainModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,6 +200,7 @@
 				326210A228317C13001525C7 /* WebViewController.swift in Sources */,
 				326210BE28326868001525C7 /* PhotoCell.swift in Sources */,
 				320D5753282E8A8400E88C34 /* SceneDelegate.swift in Sources */,
+				326210C92832B273001525C7 /* Extension+UiView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

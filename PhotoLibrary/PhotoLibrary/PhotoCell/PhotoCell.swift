@@ -13,6 +13,11 @@ class PhotoCell: UICollectionViewCell {
         return "PhotoCell"
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        addShadow()
+    }
+    
     @IBOutlet weak var mainImageView: UIImageView!
     
     @IBOutlet weak var userName: UILabel!
@@ -26,4 +31,5 @@ class PhotoCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
     }
+    
 }

@@ -21,6 +21,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
     var tapUserUrl: String?
     
     
+    
     override func viewDidLoad() {
         getNetwork()
         
@@ -41,13 +42,21 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
             }
         })
     }
+    
+    
+    
     private func configureCell(cell: PhotoCell, for indexPath: IndexPath) {
-        cell.mainImageView.contentMode = .scaleAspectFill
-        cell.backgroundColor = .lightGray
-        cell.layer.cornerRadius = 25
+      
+//        cell.mainImageView.contentMode = .scaleToFill
+//        cell.mainImageView.contentMode = .scaleAspectFit
+//        cell.mainImageView.contentMode = .scaleAspectFill
+//        cell.backgroundColor = .lightGray
+        
+        cell.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
+        cell.addShadow()
         let sortedKey = mainModel.sorted{($0.value.user_name) < ($1.value.user_name)}[indexPath.row].key
-        print(indexPath.row)
-        print(sortedKey)
+//        print(indexPath.row)
+//        print(sortedKey)
         cell.userName.text = "\(String(describing: mainModel[sortedKey]!.user_name ))"
         cell.userName.textColor = .black
         cell.photoUrl.setTitle("Photo_url", for: .normal)
@@ -59,15 +68,29 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
         
         
         cell.mainImageView.image = nil
+        cell.backgroundColor = UIColor(white: 0,alpha: 0.15)
         cell.spinner.startAnimating()
         DispatchQueue.main.async { [self] in
             tapPhotoUrl = "\(String(describing: mainModel[sortedKey]!.photo_url))"
             tapUserUrl = "\(String(describing: mainModel[sortedKey]!.user_url ))"
-            cell.mainImageView.downloaded(from: "https://dev.bgsoft.biz/task/\(sortedKey).jpg"
+            
+//            = UIImage(named: "Parallax \(indexPath.row + 1)")
+            
+            let new: () =  cell.mainImageView.downloaded(from: "https://dev.bgsoft.biz/task/\(sortedKey).jpg"
                                           ,completion: {
+                
+               
                 cell.spinner.stopAnimating()
                 cell.spinner.hidesWhenStopped = true
             })
+            
+            cell.mainImageView.image = UIImage(named: "\(new)")
+
+//            cell.mainImageView.contentMode = .scaleAspectFit
+            cell.mainImageView.contentMode = .scaleAspectFill
+            cell.mainImageView.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
+            
+            
         }
     }
     
@@ -95,7 +118,7 @@ extension PhotoViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if dataIsReady {
-            return self.mainModel.count
+            return self.mainModel.count - 1
         }else {
             return 0
         }
@@ -103,7 +126,6 @@ extension PhotoViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCell else { return UICollectionViewCell() }
-        
         configureCell(cell: cell, for: indexPath)
         
         return cell
@@ -116,6 +138,7 @@ extension PhotoViewController: UICollectionViewDelegateFlowLayout {
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: collectionView.frame.width - 40 , height: collectionView.frame.height - 50)
+        
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
