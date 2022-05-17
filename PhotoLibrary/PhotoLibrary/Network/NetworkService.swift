@@ -25,7 +25,6 @@ class NetworkService {
                     decoderModel = try? decoder.decode(MainModel.self, from: data!)
                 }
                 result(decoderModel)
-                
             }else {
                 print(error as Any)
             }

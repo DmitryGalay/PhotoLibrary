@@ -43,7 +43,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
     }
     
     private func configureCell(cell: PhotoCell, for indexPath: IndexPath) {
-        
+      
         cell.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
 //        cell.addShadow()
         let sortedKey = mainModel.sorted{($0.value.user_name) < ($1.value.user_name)}[indexPath.row].key
@@ -79,7 +79,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
             cell.addShadow()
             cell.mainImageView.contentMode = .scaleAspectFill
 //            cell.mainImageView.contentMode = .scaleAspectFit
-            cell.mainImageView.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
+//            cell.mainImageView.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
             
             
         }
@@ -130,9 +130,20 @@ extension PhotoViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as? PhotoCell else { return UICollectionViewCell() }
         configureCell(cell: cell, for: indexPath)
+        cell.configure(with: collectionView, index: indexPath.row)
         
         return cell
     }
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedCell = collectionView.cellForItem(at: indexPath)! as! PhotoCell
+        selectedCell.toggle()
+    }
+    
+    
+    
 }
 
 extension PhotoViewController: UICollectionViewDelegateFlowLayout {

@@ -72,7 +72,6 @@
 		320D574F282E8A8400E88C34 /* PhotoLibrary */ = {
 			isa = PBXGroup;
 			children = (
-				326210C228326DFB001525C7 /* PhotoCell */,
 				326210CA2832C31F001525C7 /* Model */,
 				326210C3283271B6001525C7 /* Extensions */,
 				326210C62832A58C001525C7 /* Supporting Files */,
@@ -84,13 +83,13 @@
 			path = PhotoLibrary;
 			sourceTree = "<group>";
 		};
-		326210C228326DFB001525C7 /* PhotoCell */ = {
+		326210C228326DFB001525C7 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
 				326210BD28326868001525C7 /* PhotoCell.xib */,
 				326210BC28326868001525C7 /* PhotoCell.swift */,
 			);
-			path = PhotoCell;
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		326210C3283271B6001525C7 /* Extensions */ = {
@@ -141,6 +140,7 @@
 		327535982834278900D91BAD /* VC */ = {
 			isa = PBXGroup;
 			children = (
+				326210C228326DFB001525C7 /* Cell */,
 				320D5754282E8A8400E88C34 /* PhotoViewController.swift */,
 				326210A128317C13001525C7 /* WebViewController.swift */,
 			);
