@@ -25,6 +25,9 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
         customCollectionView.dataSource = self
         customCollectionView.delegate = self
         customCollectionView.register(UINib(nibName: "PhotoCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
+        
+        customCollectionView.collectionViewLayout = CollectionViewFlowLayout(itemSize: PhotoCell.cellSize);
+        customCollectionView.decelerationRate = UIScrollView.DecelerationRate.fast
     }
     
     func getNetwork() {
@@ -40,8 +43,9 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
     }
     
     private func configureCell(cell: PhotoCell, for indexPath: IndexPath) {
+        
         cell.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
-        cell.addShadow()
+//        cell.addShadow()
         let sortedKey = mainModel.sorted{($0.value.user_name) < ($1.value.user_name)}[indexPath.row].key
 
         cell.userName.text = "\(String(describing: mainModel[sortedKey]!.user_name ))"
@@ -55,7 +59,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
         cell.clipsToBounds = true
         
         cell.mainImageView.image = nil
-        cell.backgroundColor = UIColor(white: 0,alpha: 0.15)
+        cell.backgroundColor = .clear
         cell.spinner.startAnimating()
         DispatchQueue.main.async { [self] in
             tapPhotoUrl = "\(String(describing: mainModel[sortedKey]!.photo_url))"
@@ -70,9 +74,9 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
             
             cell.mainImageView.image = UIImage(named: "\(new)")
             
-            let yOffset:CGFloat = ((customCollectionView.contentOffset.x - cell.frame.origin.x) / 200) * 25
+            let yOffset:CGFloat = ((customCollectionView.contentOffset.x - view.frame.origin.x) / 12)
             cell.imageOffset = CGPoint(x: 0, y: yOffset)
-
+            cell.addShadow()
             cell.mainImageView.contentMode = .scaleAspectFill
 //            cell.mainImageView.contentMode = .scaleAspectFit
             cell.mainImageView.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
@@ -106,33 +110,9 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
         
         for view in customCollectionView.visibleCells{
             let view:PhotoCell = view as! PhotoCell
-           let yOffset:CGFloat = ((customCollectionView.contentOffset.x - view.frame.origin.x) / 200) * 25
+           let yOffset:CGFloat = ((customCollectionView.contentOffset.x - view.frame.origin.x) / 12)
             view.setImageOffset(imageOffset: CGPoint(x: yOffset, y: 0))
           }
-        
-        
-        // MARK : -     add change size
-        
-        let centerX = scrollView.contentOffset.x + scrollView.frame.size.width/2
-        for cell in customCollectionView.visibleCells {
-
-            var offsetX = centerX - cell.center.x
-            if offsetX < 0 {
-                offsetX *= -1
-            }
-
-            cell.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-            if offsetX > 50 {
-
-                let offsetPercentage = (offsetX - 50) / view.bounds.width
-                var scaleX = 1-offsetPercentage
-
-                if scaleX < 0.8 {
-                    scaleX = 0.8
-                }
-                cell.transform = CGAffineTransform(scaleX: scaleX, y: scaleX)
-            }
-        }
     }
     
 }
@@ -159,6 +139,7 @@ extension PhotoViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         40
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: collectionView.frame.width - 40 , height: collectionView.frame.height - 50)
         

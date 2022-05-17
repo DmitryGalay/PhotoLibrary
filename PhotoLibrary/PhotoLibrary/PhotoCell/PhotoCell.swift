@@ -19,6 +19,8 @@ class PhotoCell: UICollectionViewCell {
     
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
+    static let cellSize = CGSize(width: 250, height: 350)
+    
     var imageOffset:CGPoint!
     
     var image:UIImage!{
