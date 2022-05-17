@@ -21,8 +21,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
   
     override func viewDidLoad() {
         getNetwork()
-        
-        
+
         customCollectionView.dataSource = self
         customCollectionView.delegate = self
         customCollectionView.register(UINib(nibName: "PhotoCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
@@ -40,21 +39,11 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
         })
     }
     
- 
-  
-    
     private func configureCell(cell: PhotoCell, for indexPath: IndexPath) {
-      
-//        cell.mainImageView.contentMode = .scaleToFill
-//        cell.mainImageView.contentMode = .scaleAspectFit
-//        cell.mainImageView.contentMode = .scaleAspectFill
-//        cell.backgroundColor = .lightGray
-        
         cell.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
         cell.addShadow()
         let sortedKey = mainModel.sorted{($0.value.user_name) < ($1.value.user_name)}[indexPath.row].key
-//        print(indexPath.row)
-//        print(sortedKey)
+
         cell.userName.text = "\(String(describing: mainModel[sortedKey]!.user_name ))"
         cell.userName.textColor = .black
         cell.photoUrl.setTitle("Photo_url", for: .normal)
@@ -63,7 +52,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
         cell.userUrl.tintColor = .red
         cell.photoUrl.addTarget(self, action:  #selector(connectedPhoto(sender:)), for: UIControl.Event.touchUpInside)
         cell.userUrl.addTarget(self, action:  #selector(connectedUser(sender:)), for: UIControl.Event.touchUpInside)
-        
+        cell.clipsToBounds = true
         
         cell.mainImageView.image = nil
         cell.backgroundColor = UIColor(white: 0,alpha: 0.15)
@@ -71,9 +60,6 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
         DispatchQueue.main.async { [self] in
             tapPhotoUrl = "\(String(describing: mainModel[sortedKey]!.photo_url))"
             tapUserUrl = "\(String(describing: mainModel[sortedKey]!.user_url ))"
-            
-//            = UIImage(named: "Parallax \(indexPath.row + 1)")
-            
             let new: () =  cell.mainImageView.downloaded(from: "https://dev.bgsoft.biz/task/\(sortedKey).jpg"
                                           ,completion: {
                 
@@ -83,9 +69,12 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
             })
             
             cell.mainImageView.image = UIImage(named: "\(new)")
+            
+            let yOffset:CGFloat = ((customCollectionView.contentOffset.x - cell.frame.origin.x) / 200) * 25
+            cell.imageOffset = CGPoint(x: 0, y: yOffset)
 
-//            cell.mainImageView.contentMode = .scaleAspectFit
             cell.mainImageView.contentMode = .scaleAspectFill
+//            cell.mainImageView.contentMode = .scaleAspectFit
             cell.mainImageView.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
             
             
@@ -113,6 +102,16 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
+        // MARK : - Add Paralax Effect
+        
+        for view in customCollectionView.visibleCells{
+            let view:PhotoCell = view as! PhotoCell
+           let yOffset:CGFloat = ((customCollectionView.contentOffset.x - view.frame.origin.x) / 200) * 25
+            view.setImageOffset(imageOffset: CGPoint(x: yOffset, y: 0))
+          }
+        
+        
+        // MARK : -     add change size
         
         let centerX = scrollView.contentOffset.x + scrollView.frame.size.width/2
         for cell in customCollectionView.visibleCells {
@@ -137,6 +136,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
     }
     
 }
+
 extension PhotoViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -167,3 +167,4 @@ extension PhotoViewController: UICollectionViewDelegateFlowLayout {
         UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
     }
 }
+
