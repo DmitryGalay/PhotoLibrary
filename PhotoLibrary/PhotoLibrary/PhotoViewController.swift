@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 class PhotoViewController: UIViewController, UICollectionViewDelegate {
     
     @IBOutlet weak var customCollectionView: UICollectionView!
@@ -19,9 +18,7 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
     var strain: Strain?
     var tapPhotoUrl : String?
     var tapUserUrl: String?
-    
-    
-    
+  
     override func viewDidLoad() {
         getNetwork()
         
@@ -43,7 +40,8 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
         })
     }
     
-    
+ 
+  
     
     private func configureCell(cell: PhotoCell, for indexPath: IndexPath) {
       
@@ -112,6 +110,31 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
         self.present(editScreen, animated: true, completion: nil)
     }
     
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        
+        let centerX = scrollView.contentOffset.x + scrollView.frame.size.width/2
+        for cell in customCollectionView.visibleCells {
+
+            var offsetX = centerX - cell.center.x
+            if offsetX < 0 {
+                offsetX *= -1
+            }
+
+            cell.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            if offsetX > 50 {
+
+                let offsetPercentage = (offsetX - 50) / view.bounds.width
+                var scaleX = 1-offsetPercentage
+
+                if scaleX < 0.8 {
+                    scaleX = 0.8
+                }
+                cell.transform = CGAffineTransform(scaleX: scaleX, y: scaleX)
+            }
+        }
+    }
     
 }
 extension PhotoViewController: UICollectionViewDataSource {
