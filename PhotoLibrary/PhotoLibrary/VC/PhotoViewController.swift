@@ -18,7 +18,8 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
     var strain: Strain?
     var tapPhotoUrl : String?
     var tapUserUrl: String?
-  
+    var scrolingtimer = Timer()
+    
     override func viewDidLoad() {
         getNetwork()
 
@@ -80,10 +81,29 @@ class PhotoViewController: UIViewController, UICollectionViewDelegate {
             cell.mainImageView.contentMode = .scaleAspectFill
 //            cell.mainImageView.contentMode = .scaleAspectFit
 //            cell.mainImageView.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
+        }
+            var rowIndex = indexPath.row
+                        let number = self.mainModel.count - 1
+            
+                        if rowIndex < number {
+                            rowIndex = rowIndex + 1
+                        } else {
+                            rowIndex = 0
+                        }
+            
+                        scrolingtimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(startTimer), userInfo: rowIndex, repeats: true)
+            
+            
             
             
         }
-    }
+    
+    @objc func startTimer(theTimer: Timer) {
+           UIView.animate(withDuration: 10.0, delay: 0, options: .curveEaseOut) {
+               self.customCollectionView.scrollToItem(at: IndexPath(row: theTimer.userInfo! as! Int, section: 0), at: .centeredHorizontally, animated: true)
+           }
+   
+       }
     
     @objc func connectedPhoto(sender: UIButton!) {
         
@@ -121,7 +141,7 @@ extension PhotoViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if dataIsReady {
-            return self.mainModel.count - 1
+            return self.mainModel.count 
         }else {
             return 0
         }
