@@ -22,7 +22,7 @@ class NetworkService {
                 let decoder = JSONDecoder()
                 var decoderModel: MainModel?
                 if data != nil {
-                    decoderModel = try? decoder.decode(MainModel.self, from: data!)
+                decoderModel = try? decoder.decode(MainModel.self, from: data!)
                 }
                 result(decoderModel)
             }else {

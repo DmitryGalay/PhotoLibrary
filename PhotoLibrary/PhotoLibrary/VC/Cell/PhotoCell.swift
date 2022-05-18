@@ -9,29 +9,6 @@ import UIKit
 
 
 
-
-
-private enum State {
-    case expanded
-    case collapsed
-    
-    var change: State {
-        switch self {
-        case .expanded: return .collapsed
-        case .collapsed: return .expanded
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
-
 class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
     
     @IBOutlet weak var mainImageView: UIImageView!
@@ -46,7 +23,35 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
     
     static let cellSize = CGSize(width: 250, height: 350)
     
-    var imageOffset:CGPoint!
+    public var imageOffset:CGPoint!
+    
+    private var animationProgress: CGFloat = 0
+    
+    private var initialFrame: CGRect?
+    
+    static let identifier = "CityCollectionViewCell"
+    
+    private var collectionView: UICollectionView?
+    
+    private var state: State = .collapsed
+    
+    private let popupOffset: CGFloat = (UIScreen.main.bounds.height - cellSize.height)/2.0
+    
+    
+    private lazy var panRecognizer: UIPanGestureRecognizer = {
+        let recognizer = UIPanGestureRecognizer()
+        recognizer.addTarget(self, action: #selector(popupViewPanned(recognizer:)))
+        recognizer.delegate = self
+        
+        return recognizer
+        
+    }()
+    
+    private lazy var animator: UIViewPropertyAnimator = {
+        let cubicTiming = UICubicTimingParameters(controlPoint1: CGPoint(x: 0.17, y: 0.67), controlPoint2: CGPoint(x: 0.76, y: 1.0))
+        
+        return UIViewPropertyAnimator(duration: 0.3, timingParameters: cubicTiming)
+    }()
     
     var image:UIImage!{
         get{
@@ -61,7 +66,7 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
             }
         }
     }
-
+    
     override var reuseIdentifier: String? {
         return "PhotoCell"
     }
@@ -84,67 +89,10 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
         mainImageView.frame = offsetFrame
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    private let popupOffset: CGFloat = (UIScreen.main.bounds.height - cellSize.height)/2.0
-    
-    
-    private lazy var panRecognizer: UIPanGestureRecognizer = {
-        let recognizer = UIPanGestureRecognizer()
-        recognizer.addTarget(self, action: #selector(popupViewPanned(recognizer:)))
-        recognizer.delegate = self
-        
-        return recognizer
-        
-    }()
-    
-    
-    private var animationProgress: CGFloat = 0
-    
-    private var initialFrame: CGRect?
-    
-    private var state: State = .collapsed
-    
-    private lazy var animator: UIViewPropertyAnimator = {
-        let cubicTiming = UICubicTimingParameters(controlPoint1: CGPoint(x: 0.17, y: 0.67), controlPoint2: CGPoint(x: 0.76, y: 1.0))
-        
-        return UIViewPropertyAnimator(duration: 0.3, timingParameters: cubicTiming)
-    }()
-    
-    private var cornerRadius: CGFloat = 25
-    
-//    static let cellSize = CGSize(width: 250, height: 350)
-    static let identifier = "CityCollectionViewCell"
-    
-    
-    private var collectionView: UICollectionView?
-    private var index: Int?
-    
-    func configure(with collectionView: UICollectionView, index: Int) {
-      
+    func changeToTopCell(with collectionView: UICollectionView) {
         
         self.collectionView = collectionView
-        self.index = index
     }
-    
-    
-
-    
     
     @objc func popupViewPanned(recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
@@ -183,9 +131,6 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
         }
     }
     
-    
- 
-    
     func toggle() {
         switch state {
         case .expanded:
@@ -194,36 +139,35 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
             expand()
         }
     }
+    
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return abs((panRecognizer.velocity(in: panRecognizer.view)).y) > abs((panRecognizer.velocity(in: panRecognizer.view)).x)
+    }
+}
 
-    private func expand() {
-        guard let collectionView = self.collectionView, let index = self.index else { return }
+private extension PhotoCell {
+    
+    enum State {
+        case expanded
+        case collapsed
+        
+        var change: State {
+            switch self {
+            case .expanded: return .collapsed
+            case .collapsed: return .expanded
+            }
+        }
+    }
+    
+    func expand() {
+        guard let collectionView = self.collectionView else { return }
         animator.addAnimations { [self] in
             self.initialFrame = self.frame
-
-            self.frame = CGRect(x: collectionView.contentOffset.x, y:0 , width: collectionView.frame.width, height: collectionView.frame.height / 1.8)
             
-            self.userName.frame = CGRect(x: collectionView.frame.midX  , y: collectionView.frame.height / 1.2, width: self.userName.frame.width, height: self.userName.frame.height)
-            
-            
-            
-            
-            
-//            self.photoUrl.frame = CGRect(x: collectionView.frame.width - 50 , y: collectionView.frame.minY + 50  , width: self.userName.frame.width, height: self.userName.frame.height)
-//
-//            self.userUrl.frame = CGRect(x: -collectionView.frame.width + 50 , y: collectionView.frame.minY + 50  , width: self.userName.frame.width, height: self.userName.frame.height)
-            
-            
+            self.frame = CGRect(x: collectionView.contentOffset.x, y:0 , width: collectionView.frame.width, height: collectionView.frame.height / 2.7)
             self.userUrl.alpha = 1
             self.userName.alpha = 1
             self.photoUrl.alpha = 1
-            
-            if let leftCell = collectionView.cellForItem(at: IndexPath(row: index - 1, section: 0)) {
-                leftCell.center.x -= 50
-            }
-            
-            if let rightCell = collectionView.cellForItem(at: IndexPath(row: index + 1, section: 0)) {
-                rightCell.center.x += 50
-            }
             
             self.layoutIfNeeded()
         }
@@ -242,28 +186,14 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
         animator.startAnimation()
     }
     
-    
-    private func collapse() {
-        guard let collectionView = self.collectionView, let index = self.index else { return }
+    func collapse() {
+        guard let collectionView = self.collectionView else { return }
         
         animator.addAnimations {
-            
-//
             self.userUrl.alpha = 0
             self.userName.alpha = 0
             self.photoUrl.alpha = 0
-            
-            self.layer.cornerRadius = self.cornerRadius
             self.frame = self.initialFrame!
-            
-            if let leftCell = collectionView.cellForItem(at: IndexPath(row: index - 1, section: 0)) {
-                leftCell.center.x += 50
-            }
-            
-            if let rightCell = collectionView.cellForItem(at: IndexPath(row: index + 1, section: 0)) {
-                rightCell.center.x -= 50
-            }
-            
             self.layoutIfNeeded()
         }
         
@@ -277,36 +207,8 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
                 ()
             }
         }
-        
         animator.startAnimation()
     }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return abs((panRecognizer.velocity(in: panRecognizer.view)).y) > abs((panRecognizer.velocity(in: panRecognizer.view)).x)
-    }
 }
-    
-

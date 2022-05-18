@@ -7,7 +7,18 @@
 
 import Foundation
 
-typealias MainModel = [String: Strain]
+typealias MainModel = [String:Strain]
+
+
+
+struct PictureModel: Codable {
+    let id: String
+    let photo_url: String
+    let user_name: String
+    let user_url: String
+    let colors: [String]
+    
+}
 
 struct Strain: Codable {
     let photo_url: String
