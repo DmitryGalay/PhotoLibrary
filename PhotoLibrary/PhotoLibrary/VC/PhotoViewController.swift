@@ -12,16 +12,13 @@ class PhotoViewController: UIViewController {
     @IBOutlet weak var customCollectionView: UICollectionView!
     
     var  dataIsReady: Bool = false
-    var massKeys = [String]()
     var pictureModel: PictureModel?
     var mainModel: MainModel!
-    var strain: Strain?
     var tapPhotoUrl : String?
     var tapUserUrl: String?
     var scrolingtimer = Timer()
     var noTouch: Bool = true
     var picture = [PictureModel]()
-    
     
     override func viewDidLoad() {
         getNetwork()
@@ -29,7 +26,6 @@ class PhotoViewController: UIViewController {
         customCollectionView.dataSource = self
         customCollectionView.delegate = self
         customCollectionView.register(UINib(nibName: "PhotoCell", bundle: nil), forCellWithReuseIdentifier: "PhotoCell")
-        
         customCollectionView.collectionViewLayout = CollectionViewFlowLayout(itemSize: PhotoCell.cellSize);
         customCollectionView.decelerationRate = UIScrollView.DecelerationRate.fast
     }
@@ -122,21 +118,25 @@ private extension PhotoViewController {
     
     func settingsForCell(cell: PhotoCell) {
         cell.mainImageView.image = nil
+        cell.mainImageView.layer.cornerRadius = 25
+        
         cell.backgroundColor = .clear
         cell.userName.textColor = .white
         cell.photoUrl.setTitle("Photo_url", for: .normal)
         cell.photoUrl.tintColor = .white
         cell.userUrl.setTitle("User_url", for: .normal)
         cell.userUrl.tintColor = .white
+       
+        cell.mainImageView.contentMode = .scaleAspectFill
+//        cell.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
         cell.addShadow()
         cell.mainImageView.contentMode = .scaleAspectFill
-        cell.addRadius(amount: 25, withBorderAmount: 1, andColor: .clear)
+       
     }
     
     func configureCell(cell: PhotoCell, for indexPath: IndexPath) {
         let path = picture[indexPath.row ]
         cell.userName.text = "\(String(describing: path.user_name ))"
-        settingsForCell(cell: cell)
         tapPhotoUrl = "\(String(describing: path.photo_url))"
         tapUserUrl = "\(String(describing:path.user_url ))"
         cell.spinner.startAnimating()
@@ -149,13 +149,15 @@ private extension PhotoViewController {
             
             cell.mainImageView.image = UIImage(named: "\(new)")
             //            autoScrolling(indexPath: indexPath)
-            
+            self.settingsForCell(cell: cell)
+//            cell.mainImageView.contentMode = .scaleAspectFill
         }
         let yOffset:CGFloat = ((customCollectionView.contentOffset.x - view.frame.origin.x) / 12)
         cell.imageOffset = CGPoint(x: 0, y: yOffset)
         cell.photoUrl.addTarget(self, action:  #selector(connectedPhoto(sender:)), for: UIControl.Event.touchUpInside)
         cell.userUrl.addTarget(self, action:  #selector(connectedUser(sender:)), for: UIControl.Event.touchUpInside)
         cell.clipsToBounds = true
+        
     }
     
     @objc func startTimer(theTimer: Timer) {
