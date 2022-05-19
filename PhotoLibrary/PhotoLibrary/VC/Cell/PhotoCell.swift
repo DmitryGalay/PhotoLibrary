@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
     
     @IBOutlet weak var mainImageView: UIImageView!
@@ -37,19 +35,16 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
     
     private let popupOffset: CGFloat = (UIScreen.main.bounds.height - cellSize.height)/2.0
     
-    
     private lazy var panRecognizer: UIPanGestureRecognizer = {
         let recognizer = UIPanGestureRecognizer()
         recognizer.addTarget(self, action: #selector(popupViewPanned(recognizer:)))
         recognizer.delegate = self
         
         return recognizer
-        
     }()
     
     private lazy var animator: UIViewPropertyAnimator = {
         let cubicTiming = UICubicTimingParameters(controlPoint1: CGPoint(x: 0.17, y: 0.67), controlPoint2: CGPoint(x: 0.76, y: 1.0))
-        
         return UIViewPropertyAnimator(duration: 0.3, timingParameters: cubicTiming)
     }()
     
@@ -73,16 +68,21 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        self.image = nil
+        self.mainImageView.image = nil
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
         clipsToBounds = false
         addShadow()
         self.addGestureRecognizer(panRecognizer)
     }
     
     func setImageOffset(imageOffset:CGPoint) {
+        
         self.imageOffset = imageOffset
         let frame:CGRect = mainImageView.bounds
         let offsetFrame:CGRect = frame.offsetBy(dx: self.imageOffset.x, dy: self.imageOffset.y)
@@ -96,6 +96,7 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
     
     @objc func popupViewPanned(recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
+            
         case .began:
             
             toggle()
@@ -103,6 +104,7 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
             animationProgress = animator.fractionComplete
             
         case .changed:
+            
             let translation = recognizer.translation(in: collectionView)
             var fraction = -translation.y / popupOffset
             if state == .expanded { fraction *= -1 }
@@ -110,6 +112,7 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
             animator.fractionComplete = fraction + animationProgress
             
         case .ended:
+            
             let velocity = recognizer.velocity(in: self)
             let shouldComplete = velocity.y > 0
             if velocity.y == 0 {
@@ -117,15 +120,16 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
                 break
             }
             switch state {
+                
             case .expanded:
                 if !shouldComplete && !animator.isReversed { animator.isReversed = !animator.isReversed }
                 if shouldComplete && animator.isReversed { animator.isReversed = !animator.isReversed }
+                
             case .collapsed:
                 if shouldComplete && !animator.isReversed { animator.isReversed = !animator.isReversed }
                 if !shouldComplete && animator.isReversed { animator.isReversed = !animator.isReversed }
             }
             animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-            
         default:
             ()
         }
@@ -160,18 +164,17 @@ private extension PhotoCell {
     }
     
     func expand() {
+        
         guard let collectionView = self.collectionView else { return }
+
         animator.addAnimations { [self] in
             self.initialFrame = self.frame
-            
             self.frame = CGRect(x: collectionView.contentOffset.x, y:0 , width: collectionView.frame.width, height: collectionView.frame.height / 2.7)
             self.userUrl.alpha = 1
             self.userName.alpha = 1
             self.photoUrl.alpha = 1
-            
             self.layoutIfNeeded()
         }
-        
         animator.addCompletion { position in
             switch position {
             case .end:
@@ -182,11 +185,11 @@ private extension PhotoCell {
                 ()
             }
         }
-        
         animator.startAnimation()
     }
     
     func collapse() {
+        
         guard let collectionView = self.collectionView else { return }
         
         animator.addAnimations {
@@ -209,6 +212,4 @@ private extension PhotoCell {
         }
         animator.startAnimation()
     }
-    
-    
 }

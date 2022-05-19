@@ -8,33 +8,34 @@
 import Foundation
 import UIKit
 
+var imageToCache = NSCache<NSString,UIImage>()
+
 extension UIImageView {
-    func downloaded(from url: URL, contentMode mode: UIView.ContentMode = .scaleToFill,
-                    completion: @escaping ()->()) {
-        contentMode = mode
-        URLSession.shared.dataTask(with: url) { data, response, error in
+    
+    func loadImagesWithCache(_ urlString: String, completion: @escaping ()->()) {
+        
+        self.image = nil
+        
+        if let  cacheImage = imageToCache.object(forKey: NSString(string: urlString)){
+            self.image = cacheImage
+        }
+        guard let url = URL(string: urlString) else{return}
+        URLSession.shared.dataTask(with: url) { data, _, error in
             
-            DispatchQueue.main.async() { [weak self] in
+            DispatchQueue.main.sync {
                 completion()
             }
-            guard
-                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
-                let data = data, error == nil,
-                let image = UIImage(data: data)
-            else {
-                return }
-            DispatchQueue.main.async() { [weak self] in
-                self?.image = image
+            
+            if let error = error {
+                print(error)
+            }
+            
+            if let data = data, let downloadImage = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.image = downloadImage
+                    imageToCache.setObject(downloadImage, forKey: NSString(string: urlString))
+                }
             }
         }.resume()
     }
-    
-    func downloaded(from link: String, contentMode mode: UIView.ContentMode = .scaleAspectFit,
-                    completion: @escaping()->()) {
-        guard let url = URL(string: link) else { return }
-        downloaded(from: url, contentMode: mode,
-                   completion: completion)
-    }
 }
-

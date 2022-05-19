@@ -10,6 +10,7 @@ import WebKit
 
 
 class WebViewController: UIViewController {
+    
     var text: String = ""
     let webView = WKWebView()
 
@@ -25,11 +26,9 @@ class WebViewController: UIViewController {
     }
 
     func openUrl() {
-
         guard let url = URL(string: "\(text))") else {
             return
         }
         webView.load(URLRequest(url: url))
     }
 }
-

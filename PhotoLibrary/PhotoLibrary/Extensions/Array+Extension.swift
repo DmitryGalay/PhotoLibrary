@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 extension Array where Element: Hashable {
+    
     var uniques: Array {
         var buffer = Array()
         var added = Set<Element>()
