@@ -155,7 +155,6 @@ private extension PhotoViewController {
         cell.userName.text = "\(String(describing: path.user_name ))"
         cell.spinner.startAnimating()
         cell.mainImageView.loadImagesWithCache(ImageUrl, completion: {
-            self.settingsForCell(cell: cell)
             cell.spinner.stopAnimating()
             cell.spinner.hidesWhenStopped = true
         })
@@ -163,7 +162,6 @@ private extension PhotoViewController {
         cell.imageOffset = CGPoint(x: 0, y: yOffset)
         cell.photoUrl.addTarget(self, action:  #selector(connectedPhoto(sender:)), for: UIControl.Event.touchUpInside)
         cell.userUrl.addTarget(self, action:  #selector(connectedUser(sender:)), for: UIControl.Event.touchUpInside)
-        cell.clipsToBounds = true
     }
     
     // MARK : - timer

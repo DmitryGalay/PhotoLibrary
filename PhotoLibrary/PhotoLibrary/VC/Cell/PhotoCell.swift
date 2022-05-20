@@ -76,8 +76,6 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        clipsToBounds = false
-        addShadow()
         self.addGestureRecognizer(panRecognizer)
     }
     
