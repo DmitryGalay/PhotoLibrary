@@ -38,6 +38,7 @@ class PhotoViewController: UIViewController {
         customCollectionView.decelerationRate = UIScrollView.DecelerationRate.normal
     }
 }
+
 // MARK : - dataSourse
 
 extension PhotoViewController: UICollectionViewDataSource {
@@ -64,9 +65,22 @@ extension PhotoViewController: UICollectionViewDataSource {
         let selectedCell = collectionView.cellForItem(at: indexPath)! as! PhotoCell
         tapUserUrl = picture[indexPath.item].user_url
         tapPhotoUrl = picture[indexPath.item].photo_url
-        print("\(tapUserUrl)")
         selectedCell.toggle()
     }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+            let pageFloat = (scrollView.contentOffset.x / scrollView.frame.size.width)
+            let pageInt = Int(round(pageFloat))
+        
+            switch pageInt {
+            case 0:
+                customCollectionView.scrollToItem(at: [0, picture.count - 1], at:.left, animated: false)
+            case picture.count - 1:
+                customCollectionView.scrollToItem(at: [0, 0], at: .right, animated: true)
+            default:
+                break
+            }
+        }
 }
 
 extension PhotoViewController: UICollectionViewDelegateFlowLayout {
@@ -145,6 +159,7 @@ private extension PhotoViewController {
         cell.userUrl.tintColor = .white
         cell.addShadow()
         cell.mainImageView.contentMode = .scaleAspectFill
+
     }
     
     func configureCell(cell: PhotoCell, for indexPath: IndexPath) {

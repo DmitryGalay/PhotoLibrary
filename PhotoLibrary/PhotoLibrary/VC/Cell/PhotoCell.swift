@@ -82,7 +82,7 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
     func setImageOffset(imageOffset:CGPoint) {
         
         self.imageOffset = imageOffset
-        let frame:CGRect = mainImageView.bounds
+        let frame:CGRect = contentView.bounds
         let offsetFrame:CGRect = frame.offsetBy(dx: self.imageOffset.x, dy: self.imageOffset.y)
         mainImageView.frame = offsetFrame
     }
