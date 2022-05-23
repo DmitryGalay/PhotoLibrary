@@ -22,6 +22,7 @@
 		326210C92832B273001525C7 /* UiView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326210C82832B273001525C7 /* UiView+Extension.swift */; };
 		3275359528340C2A00D91BAD /* CollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3275359428340C2A00D91BAD /* CollectionViewFlowLayout.swift */; };
 		3275359A2834FEC700D91BAD /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327535992834FEC600D91BAD /* Array+Extension.swift */; };
+		32A76912283B5C000006284F /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A76911283B5C000006284F /* UIColor+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		326210C82832B273001525C7 /* UiView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UiView+Extension.swift"; sourceTree = "<group>"; };
 		3275359428340C2A00D91BAD /* CollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		327535992834FEC600D91BAD /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		32A76911283B5C000006284F /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,11 +78,11 @@
 			children = (
 				326210CA2832C31F001525C7 /* Model */,
 				326210C3283271B6001525C7 /* Extensions */,
-				326210C62832A58C001525C7 /* Supporting Files */,
 				327535982834278900D91BAD /* VC */,
 				327535972834277B00D91BAD /* Network */,
 				327535962834276800D91BAD /* Layout */,
 				320D5756282E8A8400E88C34 /* Main.storyboard */,
+				326210C62832A58C001525C7 /* Supporting Files */,
 			);
 			path = PhotoLibrary;
 			sourceTree = "<group>";
@@ -100,6 +102,7 @@
 				326210C028326B2F001525C7 /* UIImage+Extension.swift */,
 				326210C82832B273001525C7 /* UiView+Extension.swift */,
 				327535992834FEC600D91BAD /* Array+Extension.swift */,
+				32A76911283B5C000006284F /* UIColor+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 				3275359528340C2A00D91BAD /* CollectionViewFlowLayout.swift in Sources */,
 				320D5755282E8A8400E88C34 /* PhotoViewController.swift in Sources */,
 				326210C128326B2F001525C7 /* UIImage+Extension.swift in Sources */,
+				32A76912283B5C000006284F /* UIColor+Extension.swift in Sources */,
 				3275359A2834FEC700D91BAD /* Array+Extension.swift in Sources */,
 				326210C528327229001525C7 /* NetworkService.swift in Sources */,
 				326210B9283266D0001525C7 /* MainModel.swift in Sources */,

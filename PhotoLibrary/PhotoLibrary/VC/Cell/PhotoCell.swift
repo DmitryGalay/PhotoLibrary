@@ -48,6 +48,13 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
         return UIViewPropertyAnimator(duration: 0.3, timingParameters: cubicTiming)
     }()
     
+    let gradientLayer: CAGradientLayer = {
+          let gradientLayer = CAGradientLayer()
+        gradientLayer.cornerRadius = 25
+//        mainImageView.
+          return gradientLayer
+      }()
+    
     var image:UIImage!{
         get{
             return self.image
@@ -78,6 +85,24 @@ class PhotoCell: UICollectionViewCell,UIGestureRecognizerDelegate {
         
         self.addGestureRecognizer(panRecognizer)
     }
+    
+    override func draw(_ rect: CGRect) {
+           if let context = UIGraphicsGetCurrentContext() {
+               gradientLayer.bounds = bounds
+               gradientLayer.render(in: context)
+               gradientLayer.backgroundColor = UIColor.clear.cgColor
+
+               context.saveGState()
+               context.setBlendMode(.softLight)
+
+               context.restoreGState()
+               
+               
+               mainImageView.layer.render(in: context)
+//               mainImageView.layer.insertSublayer(gradientLayer, at: 0)
+           }
+       }
+    
     
     func setImageOffset(imageOffset:CGPoint) {
         

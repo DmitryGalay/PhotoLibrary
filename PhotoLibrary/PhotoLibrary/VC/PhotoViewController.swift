@@ -19,8 +19,8 @@ class PhotoViewController: UIViewController {
     var scrolingtimer = Timer()
     var noTouch: Bool = true
     var picture = [PictureModel]()
-    
-    
+    var colorArray = [CGColor] ()
+   
     override func viewDidLoad() {
         config()
     }
@@ -69,18 +69,19 @@ extension PhotoViewController: UICollectionViewDataSource {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-            let pageFloat = (scrollView.contentOffset.x / scrollView.frame.size.width)
-            let pageInt = Int(round(pageFloat))
+        colorArray.removeAll()
+        let pageFloat = (scrollView.contentOffset.x / scrollView.frame.size.width)
+        let pageInt = Int(round(pageFloat))
         
-            switch pageInt {
-            case 0:
-                customCollectionView.scrollToItem(at: [0, picture.count - 1], at:.left, animated: false)
-            case picture.count - 1:
-                customCollectionView.scrollToItem(at: [0, 0], at: .right, animated: true)
-            default:
-                break
-            }
+        switch pageInt {
+        case 0:
+            customCollectionView.scrollToItem(at: [0, picture.count - 1], at:.left, animated: false)
+        case picture.count - 1:
+            customCollectionView.scrollToItem(at: [0, 0], at: .right, animated: true)
+        default:
+            break
         }
+    }
 }
 
 extension PhotoViewController: UICollectionViewDelegateFlowLayout {
@@ -159,7 +160,6 @@ private extension PhotoViewController {
         cell.userUrl.tintColor = .white
         cell.addShadow()
         cell.mainImageView.contentMode = .scaleAspectFill
-
     }
     
     func configureCell(cell: PhotoCell, for indexPath: IndexPath) {
@@ -167,13 +167,20 @@ private extension PhotoViewController {
         let path = picture[indexPath.row ]
         let ImageUrl = "https://dev.bgsoft.biz/task/\(path.id).jpg"
         let yOffset:CGFloat = ((customCollectionView.contentOffset.x - view.frame.origin.x) / 12)
+        for item in path.colors {
+          let arrayColors = UIColor(hex: "\(item)")?.cgColor
+            colorArray.append(arrayColors!)
+    }
         cell.userName.text = "\(String(describing: path.user_name ))"
         cell.spinner.startAnimating()
         cell.mainImageView.loadImagesWithCache(ImageUrl, completion: {
             cell.spinner.stopAnimating()
             cell.spinner.hidesWhenStopped = true
+            cell.gradientLayer.colors = self.colorArray
+            cell.gradientLayer.frame = cell.bounds
         })
-            self.settingsForCell(cell: cell)
+            cell.mainImageView.layer.insertSublayer( cell.gradientLayer, at: 0)
+        self.settingsForCell(cell: cell)
         cell.imageOffset = CGPoint(x: 0, y: yOffset)
         cell.photoUrl.addTarget(self, action:  #selector(connectedPhoto(sender:)), for: UIControl.Event.touchUpInside)
         cell.userUrl.addTarget(self, action:  #selector(connectedUser(sender:)), for: UIControl.Event.touchUpInside)
@@ -183,8 +190,23 @@ private extension PhotoViewController {
     
     @objc func startTimer(theTimer: Timer) {
         
-        UIView.animate(withDuration: 10.0, delay: 0, options: .curveEaseOut) {
+        UIView.animate(withDuration: 1.0, delay: 0, options: .curveEaseOut) {
             self.customCollectionView.scrollToItem(at: IndexPath(row: theTimer.userInfo! as! Int, section: 0), at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+    // MARK : - autoscroll
+    
+    func autoScrolling(indexPath: IndexPath) {
+        if noTouch {
+            var rowIndex = indexPath.row
+            let number = self.mainModel.count - 1
+            if rowIndex < number {
+                rowIndex = rowIndex + 1
+            } else {
+                rowIndex = 0
+            }
+            scrolingtimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(startTimer), userInfo: rowIndex, repeats: false)
         }
     }
     
@@ -205,20 +227,5 @@ private extension PhotoViewController {
                                                                 "WebViewController") as! WebViewController
         editScreen.text = tapUserUrl!
         self.present(editScreen, animated: true, completion: nil)
-    }
-    
-    // MARK : - autoscroll
-    
-    func autoScrolling(indexPath: IndexPath) {
-        if noTouch {
-            var rowIndex = indexPath.row
-            let number = self.mainModel.count - 1
-            if rowIndex < number {
-                rowIndex = rowIndex + 1
-            } else {
-                rowIndex = 0
-            }
-            scrolingtimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(startTimer), userInfo: rowIndex, repeats: false)
-        }
     }
 }

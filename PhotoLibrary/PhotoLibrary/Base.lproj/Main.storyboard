@@ -32,9 +32,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="E5t-wN-ibM" secondAttribute="bottom" id="Rp1-K2-FLm"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="E5t-wN-ibM" secondAttribute="trailing" id="bdU-PU-yml"/>
+                            <constraint firstAttribute="trailing" secondItem="E5t-wN-ibM" secondAttribute="trailing" id="bdU-PU-yml"/>
                             <constraint firstItem="E5t-wN-ibM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="feX-Lp-inf"/>
-                            <constraint firstItem="E5t-wN-ibM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="vf4-xh-KBP"/>
+                            <constraint firstItem="E5t-wN-ibM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="vf4-xh-KBP"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="lkv-PI-6Wc"/>
